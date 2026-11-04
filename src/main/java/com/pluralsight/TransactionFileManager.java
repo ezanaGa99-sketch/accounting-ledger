@@ -1,7 +1,9 @@
 package com.pluralsight;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -13,7 +15,7 @@ public class TransactionFileManager {
 
     // Reads transactions.csv and returns a list of Transaction objects
     public static ArrayList<Transaction> getTransactionsFromFile() {
-        ArrayList<Transaction> transactions = new ArrayList<Transaction>();
+        ArrayList<Transaction> transactions = new ArrayList<>();
         try {
             BufferedReader br = new BufferedReader(new FileReader(FILE_NAME));
             String line;
@@ -40,5 +42,18 @@ public class TransactionFileManager {
             System.out.println("Oh oh: " + e.getMessage());
         }
         return transactions;
+    }
+
+    // Adds one transaction to the END of transactions.csv
+    public static void saveTransaction(Transaction transaction) {
+        try {
+            // true = append mode (add to the end, don't erase the file)
+            BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_NAME, true));
+            bw.write(transaction.toCsvLine());
+            bw.newLine();
+            bw.close();
+        } catch (IOException e) {
+            System.out.println("Oh oh: " + e.getMessage());
+        }
     }
 }
